@@ -36,6 +36,7 @@
 
   var setActions = function(){
     doSend("(update)");
+    doSend("(info)");
     $.get("https://api.github.com/repos/nidayand/"+repo+"/releases", function(data){
       if (data.length>0 && data[0].tag_name !== cversion){
         $("#cversion").text(cversion);
@@ -54,6 +55,9 @@
       $("#arrow-stop-man").on("click", function(){instr("0")});
       $("#set-start").on("click", function(){instr("start")});
       $("#set-max").on("click", function(){instr("max");});
+
+      $("#set-motor-speed").on("click", function(){instr("motor_speed " + $("#motor-speed").val());});
+      $("#factory-reset").on("click", function (){instr("reset");});
 
     }, 200);
   };
@@ -79,7 +83,10 @@
       };
       websocket.onopen = function(evt) {
         ons.notification.toast({message: 'Connected to device', timeout: 2000});
-        setTimeout(function(){doSend("(update)");}, 1000);
+        setTimeout(function(){
+          doSend("(update)");
+          doSend("(info)");
+        }, 1000);
       };
       websocket.onclose = function(evt) {
         ons.notification.toast({message: 'Disconnected. Retrying', timeout: 2000});
@@ -88,12 +95,16 @@
       websocket.onmessage = function(evt) {
         try{
           var msg = JSON.parse(evt.data);
+          console.log(msg)
           if (typeof msg.position !== 'undefined'){
             $("#pbar").attr("value", msg.position);
           };
           if (typeof msg.set !== 'undefined'){
             $("#setrange").val(msg.set);
           };
+          if (typeof msg.motor_speed !== 'undefined'){
+            $("#motor-speed").val(msg.motor_speed);
+          }
         } catch(err){}
       };
     } catch (e){
@@ -219,6 +230,24 @@
       <ons-col style="text-align:center"><ons-button id="set-start">Set Start</ons-button></ons-col>
       <ons-col style="text-align:center">&nbsp;</ons-col>
       <ons-col style="text-align:center"><ons-button id="set-max">Set Max</ons-button></ons-col>
+    </ons-row>
+  </ons-card>
+  <ons-card>
+    <div class="title">Motor</div>
+    <ons-row style="width:100%">
+      <ons-col style="text-align:right">
+        Speed
+        <ons-input id="motor-speed"></ons-input>
+        <ons-button id="set-motor-speed">Set Speed</ons-button>
+      </ons-col>
+    </ons-row>
+  </ons-card>
+  <ons-card>
+    <div class="title">Factory Reset</div>
+    <ons-row style="width:100%">
+      <ons-col style="text-align:right">
+        <ons-button id="factory-reset">Reset</ons-button>
+      </ons-col>
     </ons-row>
   </ons-card>
   </ons-page>
