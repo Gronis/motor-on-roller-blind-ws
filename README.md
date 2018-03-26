@@ -39,3 +39,9 @@ Simply do not enter any string in the MQTT server form field upon WIFI configura
     * Button for OTA update
 * Use wifi mesh for devices: See: https://github.com/PhracturedBlue/ESP8266MQTTMesh
 * Enable OTA software updates through a webserver. See http://arduino-esp8266.readthedocs.io/en/latest/ota_updates/readme.html#http-server
+
+## Upload firmware:
+
+```
+esptool.py --port /dev/cu.wchusbserial1420 --baud 115200 write_flash 0x00000 /Users/robin/Downloads/nodemcu-master-9-modules-2017-12-29-19-08-00-float.bin
+```
