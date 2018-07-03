@@ -42,7 +42,7 @@ boolean saveItNow = false;          //If true will store positions to SPIFFS
 bool shouldSaveConfig = false;      //Used for WIFI Manager callback to save parameters
 boolean initLoop = true;            //To enable actions first time the loop is run
 
-Stepper_28BYJ_48 small_stepper(D3, D4, D2, D1); //Initiate stepper driver
+Stepper_28BYJ_48 small_stepper(D8, D7, D6, D5); //Initiate stepper driver
 
 WiFiServer server(80);                          // TCP server at port 80 will respond to HTTP requests
 WebSocketsServer webSocket = WebSocketsServer(81);  // WebSockets will respond on port 81
@@ -313,10 +313,10 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   is not moving
 */
 void stopPowerToCoils() {
-  digitalWrite(D3, LOW);
-  digitalWrite(D4, LOW);
-  digitalWrite(D2, LOW);
-  digitalWrite(D1, LOW);
+  digitalWrite(D8, LOW);
+  digitalWrite(D7, LOW);
+  digitalWrite(D6, LOW);
+  digitalWrite(D5, LOW);
 }
 
 /*
